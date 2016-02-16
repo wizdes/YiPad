@@ -1,20 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using Microsoft.Win32;
 
 namespace PadTest1
 {
@@ -23,16 +10,33 @@ namespace PadTest1
     /// </summary>
     public partial class MainWindow : Window
     {
+        private static Dictionary<int, string> windowToFilenameDictionary = new Dictionary<int, string>(); 
+
         public MainWindow()
         {
             InitializeComponent();
+            windowToFilenameDictionary[0] = "";
+            string[] args = System.Environment.GetCommandLineArgs();
+            if (args.Length > 1)
+            {
+                string fileName = args[1];
+                FileDetails f = FileOperations.OpenFileNoDialog(fileName);
+                UISetFile(f);
+            }
         }
 
+        // TODO: May want to seperate the UI model into another class? 
         private void menuItemOpen_Click(object sender, RoutedEventArgs e)
         {
             FileDetails details = FileOperations.OpenFile();
+            UISetFile(details);
+        }
+
+        private void UISetFile(FileDetails details)
+        {
             TextBox.Text = details.file;
             App.Title = details.fileName;
+            windowToFilenameDictionary[0] = details.fileName;
         }
 
         private void MenuItemNew_OnClick(object sender, RoutedEventArgs e)
@@ -43,13 +47,22 @@ namespace PadTest1
         private void NewFile()
         {
             TextBox.Text = "";
+            windowToFilenameDictionary[0] = "";
             App.Title = "YiPad";
         }
 
         private void MenuItemSave_OnClick(object sender, RoutedEventArgs e)
         {
-            string fileTitle = FileOperations.SaveFile(TextBox.Text);
-            App.Title = fileTitle;
+            if (windowToFilenameDictionary[0] == "")
+            {
+                string fileTitle = FileOperations.SaveFile(TextBox.Text);
+                windowToFilenameDictionary[0] = fileTitle;
+                App.Title = fileTitle;
+            }
+            else
+            {
+                FileOperations.SaveFileNoDialog(windowToFilenameDictionary[0], TextBox.Text);
+            }
         }
 
         private void TextBox_OnKeyDown(object sender, KeyEventArgs e)
@@ -72,29 +85,6 @@ namespace PadTest1
             }
         }
 
-        private void DescriptionTextBox_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
-        {
-            TextBox thisTextBox = sender as TextBox;
-            if (thisTextBox != null)
-            {
-                // only check if we have passed the MaxLines 
-                if (thisTextBox.LineCount > thisTextBox.MaxLines)
-                {
-                    // we are going to discard the last entered character
-                    int numChars = thisTextBox.Text.Length;
-
-                    // force the issue
-                    thisTextBox.Text = thisTextBox.Text.Substring(0, numChars - 1);
-
-                    // set the cursor back to the last allowable character
-                    thisTextBox.SelectionStart = numChars - 1;
-
-                    // disallow the key being passed in
-                    e.Handled = true;
-                }
-            }
-        }
-
         private void TextBox_OnSelectionChanged(object sender, RoutedEventArgs e)
         {
             int caret = TextBox.CaretIndex;
@@ -103,6 +93,25 @@ namespace PadTest1
             int displayedRow = row + 1;
             int displayColumn = column + 1;
             StatusBarLine.Text = "Line " + displayedRow + ":" + TextBox.LineCount + " Column " + displayColumn;
+        }
+
+        private void MenuItemSaveAs_OnClick(object sender, RoutedEventArgs e)
+        {
+            string fileTitle = FileOperations.SaveFile(TextBox.Text);
+            windowToFilenameDictionary[0] = fileTitle;
+            App.Title = fileTitle;
+        }
+
+        private void TextBox_OnDrop(object sender, DragEventArgs e)
+        {
+            string[] data = (string[]) e.Data.GetData(DataFormats.FileDrop, false);
+            FileDetails f = FileOperations.OpenFileNoDialog(data[0]);
+            UISetFile(f);
+        }
+
+        private void TextBox_OnPreviewDragOver(object sender, DragEventArgs e)
+        {
+            e.Handled = true;
         }
     }
 }

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 using Microsoft.Win32;
 
 namespace PadTest1
@@ -18,11 +13,19 @@ namespace PadTest1
 
             if (ofd.ShowDialog() == true)
             {
-                StreamReader reader = new StreamReader(ofd.FileName);
-                f.file = reader.ReadToEnd();
-                reader.Close();
-                f.fileName = ofd.FileName;
+                f = OpenFileNoDialog(ofd.FileName);
             }
+
+            return f;
+        }
+
+        internal static FileDetails OpenFileNoDialog(string fileName)
+        {
+            FileDetails f= new FileDetails();
+            StreamReader reader = new StreamReader(fileName);
+            f.file = reader.ReadToEnd();
+            reader.Close();
+            f.fileName = fileName;
 
             return f;
         }
@@ -36,12 +39,17 @@ namespace PadTest1
             if (sfd.ShowDialog() == true)
             {
                 fileName = sfd.FileName;
-                StreamWriter writer = new StreamWriter(fileName);
-                writer.Write(file);
-                writer.Close();
+                SaveFileNoDialog(file, fileName);
             }
 
             return fileName;
+        }
+
+        internal static void SaveFileNoDialog(string file, string fileName)
+        {
+            StreamWriter writer = new StreamWriter(fileName);
+            writer.Write(file);
+            writer.Close();
         }
     }
 }

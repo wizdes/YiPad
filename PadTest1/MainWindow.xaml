@@ -9,10 +9,11 @@
     <Grid>
         <Menu Margin="0,0,0,0" x:Name="menu" VerticalAlignment="Top" Height="20" BorderBrush="LightGray" Background="White" BorderThickness="0 0 0 2">
             <MenuItem x:Name="MenuItemNew" InputGestureText="Ctrl+N" Header="New" Click="MenuItemNew_OnClick"></MenuItem>
-            <MenuItem x:Name="MenuItemOpen" InputGestureText="Ctrl+N" Header="Open" Click="menuItemOpen_Click"></MenuItem>
-            <MenuItem x:Name="MenuItemSave" InputGestureText="Ctrl+N" Header="Save" Click="MenuItemSave_OnClick"></MenuItem>
+            <MenuItem x:Name="MenuItemOpen" InputGestureText="Ctrl+O" Header="Open" Click="menuItemOpen_Click"></MenuItem>
+            <MenuItem x:Name="MenuItemSave" InputGestureText="Ctrl+S" Header="Save" Click="MenuItemSave_OnClick"></MenuItem>
+            <MenuItem x:Name="MenuItemSaveAs" InputGestureText="Ctrl+Shift+S" Header="Save As" Click="MenuItemSaveAs_OnClick"></MenuItem>
         </Menu>
-        <TextBox Margin="0,20,0,20" x:Name="TextBox" BorderThickness="1" BorderBrush="White" FontFamily="Inconsolata" FontSize="13" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" AcceptsTab="True" KeyDown="TextBox_OnKeyDown" SelectionChanged="TextBox_OnSelectionChanged">
+        <TextBox Margin="0,20,0,20" x:Name="TextBox" BorderThickness="1" BorderBrush="White" FontFamily="Inconsolata" FontSize="13" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" AcceptsTab="True" KeyDown="TextBox_OnKeyDown" SelectionChanged="TextBox_OnSelectionChanged" Drop="TextBox_OnDrop" AllowDrop="True" PreviewDragOver="TextBox_OnPreviewDragOver">
         </TextBox>
         <Menu Margin="0,0,0,0" x:Name="StatusBar" VerticalAlignment="Bottom" Height="20">
             <TextBlock x:Name="StatusBarLine">
