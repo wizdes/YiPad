@@ -2,13 +2,14 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Dragablz;
 
 namespace PadTest1
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : DragablzWindow
     {
         private static Dictionary<int, string> windowToFilenameDictionary = new Dictionary<int, string>(); 
 
