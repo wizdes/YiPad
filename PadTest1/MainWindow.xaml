@@ -5,33 +5,14 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:dragablz="http://dragablz.net/winfx/xaml/dragablz"
+        xmlns:local="clr-namespace:PadTest1"
         mc:Ignorable="d"
         Title="YiPad" Height="350" Width="525">
     <Grid>
-        <dragablz:TabablzControl Margin="8">
+        <dragablz:TabablzControl Name="TabControlHandler" ItemsSource="{Binding TabContents}" Margin="0 8 0 0" NewItemFactory="{x:Static local:MainWindow.NewItemFactory}" ItemContainerStyle="{StaticResource TrapezoidDragableTabItemStyle}">
             <dragablz:TabablzControl.InterTabController>
-                <dragablz:InterTabController />
+                <dragablz:InterTabController InterTabClient="{Binding InterTabClient}"/>
             </dragablz:TabablzControl.InterTabController>
-            <TabItem Header="Tab No. 1" IsSelected="True">
-                <Grid>
-                    <Menu Margin="0,0,0,0" x:Name="menu" VerticalAlignment="Top" Height="20" BorderBrush="LightGray" Background="White" BorderThickness="0 0 0 2">
-                    <MenuItem x:Name="MenuItemNew" InputGestureText="Ctrl+N" Header="New" Click="MenuItemNew_OnClick"></MenuItem>
-                    <MenuItem x:Name="MenuItemOpen" InputGestureText="Ctrl+O" Header="Open" Click="menuItemOpen_Click"></MenuItem>
-                    <MenuItem x:Name="MenuItemSave" InputGestureText="Ctrl+S" Header="Save" Click="MenuItemSave_OnClick"></MenuItem>
-                    <MenuItem x:Name="MenuItemSaveAs" InputGestureText="Ctrl+Shift+S" Header="Save As" Click="MenuItemSaveAs_OnClick"></MenuItem>
-                </Menu>
-                <TextBox Margin="0,20,0,20" x:Name="TextBox" BorderThickness="1" BorderBrush="White" FontFamily="Inconsolata" FontSize="13" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" AcceptsTab="True" KeyDown="TextBox_OnKeyDown" SelectionChanged="TextBox_OnSelectionChanged" Drop="TextBox_OnDrop" AllowDrop="True" PreviewDragOver="TextBox_OnPreviewDragOver">
-                </TextBox>
-                <Menu Margin="0,0,0,0" x:Name="StatusBar" VerticalAlignment="Bottom" Height="20">
-                    <TextBlock x:Name="StatusBarLine">
-                Line 1:1 Column 1
-                    </TextBlock>
-                </Menu>
-            </Grid>
-            </TabItem>
-            <TabItem Header="Tab No. 2">
-                <TextBlock>We Have Tearable Tabs!</TextBlock>
-            </TabItem>
         </dragablz:TabablzControl>
     </Grid>
 </dragablz:DragablzWindow>
